@@ -7,6 +7,7 @@ public class ButtonController : MonoBehaviour
 {
     public PlayerController Player;
     public GameObject NextStageButton;
+    private int CurrentStage;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +18,7 @@ public class ButtonController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "Game")
+        if (PlayerPrefs.GetInt("currentStage") == 1)
         {
             // When on Game Scene, check for player requirements
             // Needed: Check calendar, check laptop, then grab wallet (in any orders)
@@ -61,13 +62,24 @@ public class ButtonController : MonoBehaviour
         // Hide wallet object
         GameObject.Find("Dompet").SetActive(false);
     }
+
+    /**
+     * Function to fulfill phone requirement
+     */
+    public void CheckPhone()
+    {
+        // Make player play phone
+        Player.SetProperty("phone_animation", true);
+        // Change state phone
+        Player.SetProperty("phone", true);
+    }
     
     /**
      * Function to handle next stage button (vary on each scene)
      */
     public void NextStage()
     {
-        if(SceneManager.GetActiveScene().name == "Game")
+        if (PlayerPrefs.GetInt("currentStage") == 1)
         {
             // Check requirements if fulfilled
             // Check order: calendar, laptop, then wallet
@@ -77,7 +89,7 @@ public class ButtonController : MonoBehaviour
                 // Go to train scene
                 SceneManager.LoadScene("Game-2");
             }
-            else if(Player.GetProperty("calendar") == false)
+            else if (Player.GetProperty("calendar") == false)
             {
                 print("Check your calendar first!");
             }
@@ -85,10 +97,14 @@ public class ButtonController : MonoBehaviour
             {
                 print("Check your laptop first!");
             }
-            else if(Player.GetProperty("wallet") == false)
+            else if (Player.GetProperty("wallet") == false)
             {
                 print("Grab your wallet!");
             }
+        }
+        else if (PlayerPrefs.GetInt("currentStage") == 2)
+        {
+            print("Stage 2");
         }
     }
 }

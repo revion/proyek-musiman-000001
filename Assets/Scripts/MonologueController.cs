@@ -52,6 +52,12 @@ public class MonologueController : MonoBehaviour
         // Check monolog object state first
         if(MonologObject.activeSelf == true)
         {
+            if(PlayerPrefs.GetInt("currentStage") == 2)
+            {
+                // Make player stop playing phone
+                Player.SetProperty("phone_animation", false);
+            }
+
             // Restrict player movement
             Player.SetProperty("movement", true);
             // Hide monolog object
