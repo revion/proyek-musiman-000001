@@ -7,11 +7,10 @@ using UnityEngine.SceneManagement;
 public class LoadingController : MonoBehaviour
 {
     public float timer = 10.0f;
-    private Text loadingText;
     // Start is called before the first frame update
     void Start()
     {
-        loadingText = GameObject.Find("LoadingText").GetComponent<Text>();
+        
     }
 
     // Update is called once per frame
@@ -21,20 +20,12 @@ public class LoadingController : MonoBehaviour
 
         if(timer <= 0.0f)
         {
-            SceneManager.LoadScene("Game");
+            SceneManager.LoadScene("Game-1");
         }
     }
 
     private void FixedUpdate()
     {
-        string tempTextLoading = loadingText.text;
-        if (tempTextLoading.LastIndexOf('.') > 9)
-        {
-            loadingText.text = "Loading";
-        }
-        else
-        {
-            loadingText.text += ".";
-        }
+        
     }
 }

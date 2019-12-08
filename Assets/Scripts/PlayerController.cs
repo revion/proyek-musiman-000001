@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 40f;
     // Horizontal move state
     private float horizontalMove = 0f;
+    // Min max wall
+    public float minRangeWalk;
+    public float maxRangeWalk;
     // Player restrictions
     private bool CanMove;
     private bool CheckPhone;
@@ -24,17 +27,26 @@ public class PlayerController : MonoBehaviour
     private bool HaveSeenLaptop;
     // Stage 2
     private bool HaveCheckPhone;
+    private bool TalkToGrandma;
 
     private void Awake()
     {
         // At start of game, save session of played stage
-        if (SceneManager.GetActiveScene().name == "Game")
+        if (SceneManager.GetActiveScene().name == "Game-1")
         {
             PlayerPrefs.SetInt("currentStage", 1);
         }
         else if (SceneManager.GetActiveScene().name == "Game-2")
         {
             PlayerPrefs.SetInt("currentStage", 2);
+        }
+        else if (SceneManager.GetActiveScene().name == "Game-4")
+        {
+            PlayerPrefs.SetInt("currentStage", 4);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("currentStage", 0);
         }
     }
 
@@ -44,18 +56,24 @@ public class PlayerController : MonoBehaviour
         if(PlayerPrefs.GetInt("currentStage") == 1)
         {
             CanMove      = true;
+            // Define all property requirements here
+            // Stage 1
+            HaveWallet = false;
+            HaveSeenCalendar = false;
+            HaveSeenLaptop = false;
         }
-        else
+        else if(PlayerPrefs.GetInt("currentStage") == 2)
         {
             CanMove      = false;
+            // Define all property requirements here
+            // Stage 2
+            HaveCheckPhone = false;
+            TalkToGrandma = false;
         }
-        // Define all property requirements here
-        // Stage 1
-        HaveWallet       = false;
-        HaveSeenCalendar = false;
-        HaveSeenLaptop   = false;
-        // Stage 2
-        HaveCheckPhone   = false;
+        else if(PlayerPrefs.GetInt("currentStage") == 4)
+        {
+            CanMove = true;
+        }
     }
 
     // Update is called once per frame
@@ -77,6 +95,11 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("speed", Mathf.Abs(horizontalMove));
         // Run the animation of checking phone
         animator.SetBool("checking_phone", CheckPhone);
+
+        transform.position = new Vector2(
+            Mathf.Clamp(transform.position.x, minRangeWalk, maxRangeWalk),
+            transform.position.y
+        );
     }
 
     void FixedUpdate()
@@ -117,6 +140,10 @@ public class PlayerController : MonoBehaviour
         {
             return CheckPhone;
         }
+        else if(content == "grandma")
+        {
+            return TalkToGrandma;
+        }
         else
         {
             return false;
@@ -154,6 +181,10 @@ public class PlayerController : MonoBehaviour
         else if (content == "phone_animation")
         {
             CheckPhone = state;
+        }
+        else if(content == "grandma")
+        {
+            TalkToGrandma = state;
         }
     }
 }
