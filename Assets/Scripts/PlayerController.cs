@@ -40,9 +40,21 @@ public class PlayerController : MonoBehaviour
         {
             PlayerPrefs.SetInt("currentStage", 2);
         }
+        else if (SceneManager.GetActiveScene().name == "Game-3")
+        {
+            PlayerPrefs.SetInt("currentStage", 3);
+        }
         else if (SceneManager.GetActiveScene().name == "Game-4")
         {
             PlayerPrefs.SetInt("currentStage", 4);
+        }
+        else if (SceneManager.GetActiveScene().name == "Game-5")
+        {
+            PlayerPrefs.SetInt("currentStage", 5);
+        }
+        else if (SceneManager.GetActiveScene().name == "Game-6")
+        {
+            PlayerPrefs.SetInt("currentStage", 6);
         }
         else
         {
@@ -70,9 +82,16 @@ public class PlayerController : MonoBehaviour
             HaveCheckPhone = false;
             TalkToGrandma = false;
         }
-        else if(PlayerPrefs.GetInt("currentStage") == 4)
+        else if(PlayerPrefs.GetInt("currentStage") == 3)
         {
             CanMove = true;
+        }
+        else if (PlayerPrefs.GetInt("currentStage") == 4)
+        {
+            CanMove = true;
+            // Define all property requirements here
+            // Stage 4
+            PlayerPrefs.SetInt("havePaper", 0);
         }
     }
 

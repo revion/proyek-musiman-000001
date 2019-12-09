@@ -37,7 +37,7 @@ public class ButtonController : MonoBehaviour
                     NextStageButton.SetActive(true);
                 }
             }
-            else if(CurrentStage == 2)
+            else if (CurrentStage == 2)
             {
                 if (Input.GetMouseButtonUp(0))
                 {
@@ -53,7 +53,7 @@ public class ButtonController : MonoBehaviour
                             MonologClass.SetContent("Memeriksa HP");
                             MonologClass.ShowMonolog();
                         }
-                        else if(hit.collider.gameObject.name == "GetTalk")
+                        else if (hit.collider.gameObject.name == "GetTalk")
                         {
                             List<string> contents = new List<string> {
                                 "Nenek: \"Pagi banget dek. Mau ke mana?\"",
@@ -83,6 +83,23 @@ public class ButtonController : MonoBehaviour
                     NextStageButton.SetActive(true);
                 }
             }
+            else if (CurrentStage == 3)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+
+                    RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+                    if (hit.collider != null)
+                    {
+                        if (hit.collider.gameObject.name == "NextStage")
+                        {
+                            NextStage();
+                        }
+                    }
+                }
+            }
             else if(CurrentStage == 4)
             {
                 if (Input.GetMouseButtonDown(0))
@@ -91,11 +108,26 @@ public class ButtonController : MonoBehaviour
                     Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
 
                     RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-                    if(hit.collider != null)
+                    if (hit.collider != null)
                     {
-                        if (hit.collider.gameObject.name == "NextStage")
+                        if (hit.collider.gameObject.name == "Interact2" || hit.collider.gameObject.name == "Interact1")
                         {
-                            SceneManager.LoadScene("Game-" + (++CurrentStage).ToString());
+                            // Hide button
+                            hit.collider.gameObject.SetActive(false);
+                            // Have paper
+                            int havePaper = PlayerPrefs.GetInt("havePaper");
+                            PlayerPrefs.SetInt("havePaper", ++havePaper);
+                            Debug.Log(havePaper);
+                            if (havePaper == 2)
+                            {
+                                MonologClass.SetContent("Kertas sudah diambil, kamu bisa masuk ke museum sekarang!");
+                                MonologClass.ShowMonolog();
+                                NextStageButton.SetActive(true);
+                            }
+                        }
+                        else if(hit.collider.gameObject.name == "NextStage")
+                        {
+                            NextStage();
                         }
                     }
                 }
@@ -187,7 +219,7 @@ public class ButtonController : MonoBehaviour
             {
                 print("Next stage");
                 // Go to stage 3
-                // SceneManager.LoadScene("Game-3");
+                SceneManager.LoadScene("Game-" + (++CurrentStage).ToString());
             }
             else if (Player.GetProperty("phone") == false)
             {
@@ -196,6 +228,20 @@ public class ButtonController : MonoBehaviour
             else if (Player.GetProperty("grandma") == false)
             {
                 print("Ask someone to get more information");
+            }
+        }
+        else if(CurrentStage == 3)
+        {
+            // Go to stage 4
+            SceneManager.LoadScene("Game-" + (++CurrentStage).ToString());
+        }
+        else if(CurrentStage == 4)
+        {
+            // Check how many shattered paper have been recovered
+            if(PlayerPrefs.GetInt("havePaper") == 2)
+            {
+                // Go to stage 5
+                SceneManager.LoadScene("Game-" + (++CurrentStage).ToString());
             }
         }
     }

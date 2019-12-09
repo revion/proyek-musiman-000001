@@ -26,7 +26,7 @@ public class MonologueController : MonoBehaviour
     void Update()
     {
         // Only affect stage 4
-        if(CurrentStage == 4)
+        if(CurrentStage == 3)
         {
             if(timerToHide > 0.0f)
             {
@@ -147,7 +147,6 @@ public class MonologueController : MonoBehaviour
                     // Make player stop playing phone
                     Player.SetProperty("phone_animation", false);
                 }
-
                 // Restrict player movement
                 Player.SetProperty("movement", true);
                 // Hide monolog object
