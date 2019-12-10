@@ -28,6 +28,13 @@ public class PlayerController : MonoBehaviour
     // Stage 2
     private bool HaveCheckPhone;
     private bool TalkToGrandma;
+    // Stage 5
+    private bool HaveTicket;
+    private bool Scene1; // Pertemuan
+    private bool Scene2; // Perumusan
+    private bool Scene3; // Pengesahan
+    private bool Scene4; // Pengetikan
+    private bool Scene5; // Pembacaan
 
     private void Awake()
     {
@@ -93,11 +100,29 @@ public class PlayerController : MonoBehaviour
             // Stage 4
             PlayerPrefs.SetInt("havePaper", 0);
         }
+        else if (PlayerPrefs.GetInt("currentStage") == 5)
+        {
+            CanMove = true;
+            // Define all property requirements here
+            // Stage 5
+            PlayerPrefs.SetInt("havePaper", 2);
+            HaveTicket = false;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(PlayerPrefs.GetInt("currentStage") == 5)
+        {
+            // Expand area explored when have ticket
+            if (HaveTicket == true)
+            {
+                minRangeWalk = -66.6f;
+                maxRangeWalk = 66.7f;
+            }
+        }
+
         // If movement is not restricted
         if (CanMove == true)
         {
@@ -163,6 +188,30 @@ public class PlayerController : MonoBehaviour
         {
             return TalkToGrandma;
         }
+        else if(content == "ticket")
+        {
+            return HaveTicket;
+        }
+        else if(content == "scene-meeting")
+        {
+            return Scene1;
+        }
+        else if (content == "scene-formulation")
+        {
+            return Scene2;
+        }
+        else if (content == "scene-validate")
+        {
+            return Scene3;
+        }
+        else if (content == "scene-typing")
+        {
+            return Scene4;
+        }
+        else if (content == "scene-reading")
+        {
+            return Scene5;
+        }
         else
         {
             return false;
@@ -189,11 +238,11 @@ public class PlayerController : MonoBehaviour
         {
             HaveWallet = state;
         }
-        else if(content == "movement")
+        else if (content == "movement")
         {
             CanMove = state;
         }
-        else if(content == "phone")
+        else if (content == "phone")
         {
             HaveCheckPhone = state;
         }
@@ -201,9 +250,33 @@ public class PlayerController : MonoBehaviour
         {
             CheckPhone = state;
         }
-        else if(content == "grandma")
+        else if (content == "grandma")
         {
             TalkToGrandma = state;
+        }
+        else if (content == "ticket")
+        {
+            HaveTicket = state;
+        }
+        else if (content == "scene-meeting")
+        {
+            Scene1 = state;
+        }
+        else if (content == "scene-formulation")
+        {
+            Scene2 = state;
+        }
+        else if (content == "scene-validate")
+        {
+            Scene3 = state;
+        }
+        else if (content == "scene-typing")
+        {
+            Scene4 = state;
+        }
+        else if (content == "scene-reading")
+        {
+            Scene5 = state;
         }
     }
 }

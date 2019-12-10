@@ -117,7 +117,6 @@ public class ButtonController : MonoBehaviour
                             // Have paper
                             int havePaper = PlayerPrefs.GetInt("havePaper");
                             PlayerPrefs.SetInt("havePaper", ++havePaper);
-                            Debug.Log(havePaper);
                             if (havePaper == 2)
                             {
                                 MonologClass.SetContent("Kertas sudah diambil, kamu bisa masuk ke museum sekarang!");
@@ -130,6 +129,64 @@ public class ButtonController : MonoBehaviour
                             NextStage();
                         }
                     }
+                }
+            }
+            else if(CurrentStage == 5)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+
+                    RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+                    if (hit.collider != null)
+                    {
+                        if (hit.collider.gameObject.name == "Interact3" || hit.collider.gameObject.name == "Interact4")
+                        {
+                            // Hide button
+                            hit.collider.gameObject.SetActive(false);
+                            // Have paper
+                            int havePaper = PlayerPrefs.GetInt("havePaper");
+                            PlayerPrefs.SetInt("havePaper", ++havePaper);
+                            if (havePaper == 4)
+                            {
+                                print("Got all shattered papers");
+                            }
+                        }
+                        else if (hit.collider.gameObject.name == "BuyTicket")
+                        {
+                            // Hide interactable button
+                            hit.collider.gameObject.SetActive(false);
+                            // Expand explored area
+                            BuyTicket();
+                        }
+                        else if(hit.collider.gameObject.name == "pertemuan" || 
+                            hit.collider.gameObject.name == "perumusan" || 
+                            hit.collider.gameObject.name == "pengetikan" || 
+                            hit.collider.gameObject.name == "pengesahan" || 
+                            hit.collider.gameObject.name == "pembacaan"
+                        )
+                        {
+                            GameObject.Find("CutsceneController").GetComponent<CutsceneController>().SetImage(hit.collider.gameObject.name);
+                        }
+                        else if (hit.collider.gameObject.name == "NextStage")
+                        {
+                            NextStage();
+                        }
+                    }
+                }
+
+                // When on Game Scene, check for player requirements
+                // Needed: Read all contents on the museum
+                if (Player.GetProperty("scene-meeting") == true &&
+                    Player.GetProperty("scene-formulation") == true &&
+                    Player.GetProperty("scene-validate") == true &&
+                    Player.GetProperty("scene-typing") == true &&
+                    Player.GetProperty("scene-reading") == true
+                )
+                {
+                    // If requirements are fulfilled, then pop up the button to next stage
+                    NextStageButton.SetActive(true);
                 }
             }
         }
@@ -181,6 +238,16 @@ public class ButtonController : MonoBehaviour
         Player.SetProperty("phone", true);
         // Hide button
         GameObject.Find("Player/CheckPhoneButton").SetActive(false);
+    }
+
+    public void BuyTicket()
+    {
+        // Set state to have buy ticket
+        Player.SetProperty("ticket", true);
+        // Set content monolog
+        MonologClass.SetContent("Terima kasih sudah membeli tiket");
+        // Show monolog
+        MonologClass.ShowMonolog();
     }
 
     /**
@@ -242,6 +309,25 @@ public class ButtonController : MonoBehaviour
             {
                 // Go to stage 5
                 SceneManager.LoadScene("Game-" + (++CurrentStage).ToString());
+            }
+        }
+        else if(CurrentStage == 5)
+        {
+            // When on Game Scene, check for player requirements
+            // Needed: Read all contents on the museum
+            if (Player.GetProperty("scene-meeting") == true &&
+                Player.GetProperty("scene-formulation") == true &&
+                Player.GetProperty("scene-validate") == true &&
+                Player.GetProperty("scene-typing") == true &&
+                Player.GetProperty("scene-reading") == true
+            )
+            {
+                // Go to stage 6
+                SceneManager.LoadScene("Game-" + (++CurrentStage).ToString());
+            }
+            else
+            {
+                print("You have no or less information for your homework, lul");
             }
         }
     }
