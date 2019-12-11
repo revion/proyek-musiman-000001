@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 40f;
     // Horizontal move state
     private float horizontalMove = 0f;
+    // Get input axis by button
+    private float axisByButton = 0f;
     // Min max wall
     public float minRangeWalk;
     public float maxRangeWalk;
@@ -127,10 +129,13 @@ public class PlayerController : MonoBehaviour
         if (CanMove == true)
         {
             // Set horizontal move based on button clicked
-            horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+            //horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+            horizontalMove = axisByButton * runSpeed;
         }
         else
         {
+            // Stop moving
+            axisByButton = 0f;
             // Stop player from moving
             horizontalMove = 0.0f;
         }
@@ -278,5 +283,10 @@ public class PlayerController : MonoBehaviour
         {
             Scene5 = state;
         }
+    }
+
+    public void SetAxis(float axis)
+    {
+        axisByButton = axis;
     }
 }
