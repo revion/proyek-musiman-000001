@@ -146,7 +146,13 @@ public class MonologueController : MonoBehaviour
                 {
                     // Make player stop playing phone
                     Player.SetProperty("phone_animation", false);
+
+                    if(Player.GetProperty("phone") == true)
+                    {
+                        GameObject.Find("Crowd/sit/GetTalk").SetActive(true);
+                    }
                 }
+                
                 // Restrict player movement
                 Player.SetProperty("movement", true);
                 // Hide monolog object

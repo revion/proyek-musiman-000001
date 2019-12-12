@@ -29,6 +29,39 @@ public class ButtonController : MonoBehaviour
         {
             if (CurrentStage == 1)
             {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+
+                    RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+                    if (hit.collider != null)
+                    {
+                        if (hit.collider.gameObject.name == "NextStage")
+                        {
+                            NextStage();
+                        }
+                        else if (hit.collider.gameObject.name == "Calendar")
+                        {
+                            MonologClass.SetContent("Player: \"17 Agustus ya...\"");
+                            MonologClass.ShowMonolog();
+                            SeenCalendar();
+                        }
+                        else if (hit.collider.gameObject.name == "Laptop")
+                        {
+                            MonologClass.SetContent("Player: \"Tugas penulisan kali ini tentang museum. Mungkin sebaiknya aku pergi ke tempat yang Pak Guru katakan.\"");
+                            MonologClass.ShowMonolog();
+                            SeenLaptop();
+                        }
+                        else if (hit.collider.gameObject.name == "Wallet")
+                        {
+                            MonologClass.SetContent("Player: \"Oh iya, dompetku di laci!\"");
+                            MonologClass.ShowMonolog();
+                            GrabWallet();
+                        }
+                    }
+                }
+
                 // When on Game Scene, check for player requirements
                 // Needed: Check calendar, check laptop, then grab wallet (in any orders)
                 if (Player.GetProperty("calendar") == true && Player.GetProperty("laptop") == true && Player.GetProperty("wallet") == true)
@@ -171,7 +204,9 @@ public class ButtonController : MonoBehaviour
                         }
                         else if (hit.collider.gameObject.name == "NextStage")
                         {
-                            NextStage();
+                            //NextStage();
+                            MonologClass.SetContent("Stage selanjutnya masih dalam tahap pengembangan. Terima kasih sudah bermain.");
+                            MonologClass.ShowMonolog();
                         }
                     }
                 }
@@ -224,7 +259,7 @@ public class ButtonController : MonoBehaviour
         // Hide wallet object
         GameObject.Find("StaticObjects/Wallet").SetActive(false);
         // Hide wallet interaction button
-        GameObject.Find("Canvas/wallet").SetActive(false);
+        GameObject.Find("Wallet").SetActive(false);
     }
 
     /**

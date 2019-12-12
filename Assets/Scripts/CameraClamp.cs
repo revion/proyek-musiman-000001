@@ -22,8 +22,8 @@ public class CameraClamp : MonoBehaviour
             // Stage 5, expand area to be explored when have ticket
             if(GameObject.Find("Player").GetComponent<PlayerController>().GetProperty("ticket") == true)
             {
-                minWall = -56.62f;
-                maxWall = 56.6f;
+                minWall = -58.5f;
+                maxWall = 58.5f;
             }
         }
 
